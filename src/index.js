@@ -1,5 +1,6 @@
 import Phaser from 'phaser';
 import logoImg from './assets/logo.png';
+import Player from './player';
 
 class MyGame extends Phaser.Scene
 {
@@ -15,7 +16,16 @@ class MyGame extends Phaser.Scene
       
     create ()
     {
-        const logo = this.add.image(400, 150, 'logo');
+        this.player = this.add.existing(new Player(this, 400, 150));
+    }
+
+    update ()
+    {
+        let now = Date.now();
+        let dt = (now - (this.lastFrame || 0)) / 1000;
+        this.player.update(dt);
+
+        this.lastFrame = now;
     }
 }
 
