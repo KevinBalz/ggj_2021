@@ -10,22 +10,27 @@ export default class extends Phaser.GameObjects.Image {
         this.keyA = scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A);
         this.keyS = scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S);
         this.keyD = scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D);
+
+        this.keyUp = scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.UP);
+        this.keyDown = scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.DOWN);
+        this.keyLeft = scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.LEFT);
+        this.keyRight = scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.RIGHT);
     }
 
     update(dt) {
         let moveX = 0;
         let moveY = 0;
 
-        if (this.keyW.isDown) {
+        if (this.keyW.isDown || this.keyUp.isDown) {
             moveY -= 1;
         }
-        if (this.keyS.isDown) {
+        if (this.keyS.isDown || this.keyDown.isDown) {
             moveY += 1;
         }
-        if (this.keyA.isDown) {
+        if (this.keyA.isDown || this.keyLeft.isDown) {
             moveX -= 1;
         }
-        if (this.keyD.isDown) {
+        if (this.keyD.isDown || this.keyRight.isDown) {
             moveX += 1;
         }
 
