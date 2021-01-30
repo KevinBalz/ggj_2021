@@ -1,6 +1,7 @@
 import Phaser from "phaser";
 
 const moveSpeed = 100;
+var obstacle;
 
 export default class Player extends Phaser.GameObjects.Image {
     constructor(scene, x, y) {
@@ -17,6 +18,9 @@ export default class Player extends Phaser.GameObjects.Image {
         this.keyRight = scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.RIGHT);
 
         this.shootCooldown = 0;
+
+        var obstacles = this.scene.physics.add.staticGroup();
+        obstacle = obstacles.create(600, 500, 'logo');
     }
 
     update(dt) {
@@ -40,13 +44,17 @@ export default class Player extends Phaser.GameObjects.Image {
         if (this.scene.input.activePointer.isDown && this.shootCooldown <= 0) {
             const speed = 1000;
             const direction = this.cursor.pointer.clone().normalize();
-            this.scene.physics.add.image(this.cursor.x, this.cursor.y, 'logo')
+            var bullet = this.scene.physics.add.image(this.cursor.x, this.cursor.y, 'logo')
                 .setScale(0.1, 0.1)
                 .setVelocity(speed * direction.x, speed * direction.y)
             this.shootCooldown = 0.2;
+            this.scene.physics.add.collider(bullet, obstacle, bulletHitObstacle, null, obstacle);
         }
 
         this.x += moveX * moveSpeed * dt;
         this.y += moveY * moveSpeed * dt;
-    }
+    } 
+}
+function bulletHitObstacle(params) {
+        //
 }
