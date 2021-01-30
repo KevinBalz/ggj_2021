@@ -1,4 +1,5 @@
 import Phaser from "phaser";
+import doggoLifeImg from './assets/sea_doggo-life.png';
 
 export default class UIScene extends Phaser.Scene
 {
@@ -10,7 +11,7 @@ export default class UIScene extends Phaser.Scene
 
     preload ()
     {
-        this.load.image('doggo-life', 'src/assets/sea_doggo-life.png');
+        this.load.image('doggo-life', doggoLifeImg);
     }
 
     create ()

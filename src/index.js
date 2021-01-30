@@ -4,6 +4,20 @@ import Enemy from './enemy';
 import UIScene from './ui';
 import TargetCursor from './targetCursor';
 
+import logoImg from './assets/logo.png';
+import doggoImg from './assets/sea_doggo.png';
+import doggo2Img from './assets/sea_doggo-frame2.png';
+import doggo_rearImg from './assets/sea_doggo-rearview.png';
+import bubbleImg from './assets/bubble.png';
+import pufferfishImg from './assets/kugelfisch.png';
+import pufferfishSpikeImg from './assets/kugelfisch-bullet.png';
+import barkClip from './assets/bark.wav';
+import puffClip from './assets/puff.wav';
+import dashClip from './assets/dash.wav';
+import hitClip from './assets/hit.wav';
+import hurtClip from './assets/hurt.wav';
+import mainTheme from './assets/sea_doggo_theme-mastered.mp3';
+
 class MyGame extends Phaser.Scene
 {
     constructor ()
@@ -13,19 +27,19 @@ class MyGame extends Phaser.Scene
 
     preload ()
     {
-        this.load.image('logo', 'src/assets/logo.png');
-        this.load.image('doggo', 'src/assets/sea_doggo.png');
-        this.load.image('doggo2', 'src/assets/sea_doggo-frame2.png');
-        this.load.image('doggo-rear', 'src/assets/sea_doggo-rearview.png');
-        this.load.image('doggo-life', 'src/assets/sea_doggo-life.png');
-        this.load.image('bubble', 'src/assets/bubble.png');
-        this.load.image('pufferfish', 'src/assets/kugelfisch.png');
-        this.load.image('pufferfishSpike', 'src/assets/kugelfisch-bullet.png');
-        this.load.audio('bark', 'src/assets/bark.wav');
-        this.load.audio('puff', 'src/assets/puff.wav');
-        this.load.audio('dash', 'src/assets/dash.wav');
-        this.load.audio('hit', 'src/assets/hit.wav');
-        this.load.audio('hurt', 'src/assets/hurt.wav');
+        this.load.image('logo', logoImg);
+        this.load.image('doggo', doggoImg);
+        this.load.image('doggo2', doggo2Img);
+        this.load.image('doggo-rear', doggo_rearImg);
+        this.load.image('bubble', bubbleImg);
+        this.load.image('pufferfish', pufferfishImg);
+        this.load.image('pufferfishSpike', pufferfishSpikeImg);
+        this.load.audio('bark', barkClip);
+        this.load.audio('puff', puffClip);
+        this.load.audio('dash', dashClip);
+        this.load.audio('hit', hitClip);
+        this.load.audio('hurt', hurtClip);
+        this.load.audio('theme', mainTheme);
     }
       
     create ()
@@ -36,6 +50,9 @@ class MyGame extends Phaser.Scene
         this.enemy = this.add.existing(new Enemy(this, 400, 150));
 
         this.scene.run('ui');
+
+        var music = this.sound.add('theme');
+        music.play('', {loop: true, volume: 0.2});
     }
 
     update ()
