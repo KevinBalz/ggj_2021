@@ -20,6 +20,8 @@ class MyGame extends Phaser.Scene
         this.load.image('pufferfish', 'src/assets/kugelfisch.png');
         this.load.image('pufferfishSpike', 'src/assets/kugelfisch-bullet.png');
         this.load.audio('bark', 'src/assets/bark.wav');
+        this.load.audio('puff', 'src/assets/puff.wav');
+        this.load.audio('dash', 'src/assets/dash.wav');
     }
       
     create ()

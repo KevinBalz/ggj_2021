@@ -23,6 +23,7 @@ export default class Player extends Phaser.GameObjects.Image {
 
         var obstacles = this.scene.physics.add.staticGroup();
         this.obstacle = obstacles.create(600, 500, 'logo');
+        this.dashWasDown = this.scene.input.mousePointer.rightButtonDown();
     }
 
     update(dt) {
@@ -70,6 +71,7 @@ export default class Player extends Phaser.GameObjects.Image {
                 y: this.y + moveY * 100,
                 duration: 100
             });
+            this.scene.sound.play('dash');
         }
 
         if (this.scene.input.mousePointer.leftButtonDown() && this.shootCooldown <= 0) {
@@ -97,6 +99,7 @@ export default class Player extends Phaser.GameObjects.Image {
 
         this.x += moveX * moveSpeed * dt;
         this.y += moveY * moveSpeed * dt;
+        this.dashWasDown = this.scene.input.mousePointer.rightButtonDown();
     }
 }
 function bulletHitObstacle(params) {

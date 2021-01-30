@@ -77,6 +77,7 @@ function onCompleteBlowUp(tween, targets, enemy)
         .setFlipX(true);
     }
 
+    enemy.scene.sound.play('puff')
     enemy.startBlowDown();
     enemy.shootCooldown = 1.5;
 }
