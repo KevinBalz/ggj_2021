@@ -4,7 +4,8 @@ const moveSpeed = 100;
 
 export default class Player extends Phaser.GameObjects.Image {
     constructor(scene, x, y) {
-        super(scene, x, y, 'logo', 0)
+        super(scene, x, y, 'doggo', 0);
+        this.setScale(0.1, 0.1);
 
         this.keyW = scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W);
         this.keyA = scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A);
@@ -21,13 +22,33 @@ export default class Player extends Phaser.GameObjects.Image {
         this.dashWasDown = scene.input.mousePointer.rightButtonDown();
 
         var obstacles = this.scene.physics.add.staticGroup();
-        obstacle = obstacles.create(600, 500, 'logo');
+        this.obstacle = obstacles.create(600, 500, 'logo');
     }
 
     update(dt) {
         let moveX = 0;
         let moveY = 0;
         this.shootCooldown -= dt;
+        this.animCooldown -= dt;
+        this.rotation = Math.atan2(this.cursor.y - this.y, this.cursor.x - this.x);
+        if (this.angle < 0) {
+            this.setTexture('doggo-rear');
+        }
+        else if (this.texture.key !== 'doggo' && this.texture.key !== 'doggo2'){
+            this.setTexture('doggo');
+        }
+
+        if (this.angle > -90 && this.angle < 90) {
+            this.flipY = false;
+        }
+        else {
+            this.flipY = true;
+        }
+
+        if (this.animCooldown <= 0 && (this.texture.key === 'doggo' || this.texture.key === 'doggo2')) {
+            this.setTexture(this.texture.key === 'doggo' ? 'doggo2' : 'doggo');
+            this.animCooldown = 0.5;
+        }
 
         if (this.keyW.isDown || this.keyUp.isDown) {
             moveY -= 1;
@@ -71,8 +92,7 @@ export default class Player extends Phaser.GameObjects.Image {
                 repeat: 1337,
                 yoyo: true
             });
-            this.shootCooldown = 0.2;
-            this.scene.physics.add.collider(bubble, obstacle, bulletHitObstacle, null, obstacle);
+            this.scene.physics.add.collider(bubble, this.obstacle, bulletHitObstacle, null, this.obstacle);
         }
 
         this.x += moveX * moveSpeed * dt;
