@@ -17,13 +17,33 @@ class MyGame extends Phaser.Scene
         this.load.image('doggo-rear', 'src/assets/sea_doggo-rearview.png');
         this.load.image('bubble', 'src/assets/bubble.png');
         this.load.audio('bark', 'src/assets/bark.wav');
+
+        this.load.image('tiles', 'src/assets/map/Tilemap.png');
+        this.load.image('tiles2', 'src/assets/map/Tilemap2.png');
+        this.load.tilemapTiledJSON('map', 'src/assets/map/Testmap2.json');
     }
       
     create ()
     {
+        var map = this.add.tilemap('map');
+        var tileset1 = map.addTilesetImage('Tilemap', 'tiles');
+        var tileset2 = map.addTilesetImage('Tilemap2', 'tiles2');
+        // Bodenlayer
+        var layer1 = map.createLayer('ground', [ tileset1, tileset2 ]);
+        // Hindernisse, diese Tiles können nicht betreten werden
+        var layer2 = map.createLayer('impassable', [ tileset1, tileset2 ]);
+        // Kosmetische Tiles, hoher Anteil von Hindernissen, der den Spieler verdeckt.
+        var layer3 = map.createLayer('passable', [ tileset1, tileset2 ]);
+        // Karte skalieren, damit es zur Figur passt
+        layer1.setScale(0.5);
+        layer2.setScale(0.5);
+        layer3.setScale(0.5);
+
         this.player = this.add.existing(new Player(this, 400, 150));
         this.player.cursor = this.targetCursor = this.add.existing(new TargetCursor(this, this.player));
         this.cameras.main.startFollow(this.player, false, 0.1, 0.1);
+
+
     }
 
     update ()
@@ -46,7 +66,7 @@ const config = {
         default: 'arcade',
         arcade: {}
     },
-    scene: MyGame
+    scene: MyGame,
 };
 
 const game = new Phaser.Game(config);
