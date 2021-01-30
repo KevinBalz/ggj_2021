@@ -2,7 +2,7 @@ import Phaser from "phaser";
 
 const moveSpeed = 100;
 
-export default class extends Phaser.GameObjects.Image {
+export default class Player extends Phaser.GameObjects.Image {
     constructor(scene, x, y) {
         super(scene, x, y, 'logo', 0)
 
@@ -15,11 +15,14 @@ export default class extends Phaser.GameObjects.Image {
         this.keyDown = scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.DOWN);
         this.keyLeft = scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.LEFT);
         this.keyRight = scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.RIGHT);
+
+        this.shootCooldown = 0;
     }
 
     update(dt) {
         let moveX = 0;
         let moveY = 0;
+        this.shootCooldown -= dt;
 
         if (this.keyW.isDown || this.keyUp.isDown) {
             moveY -= 1;
@@ -32,6 +35,15 @@ export default class extends Phaser.GameObjects.Image {
         }
         if (this.keyD.isDown || this.keyRight.isDown) {
             moveX += 1;
+        }
+
+        if (this.scene.input.activePointer.isDown && this.shootCooldown <= 0) {
+            const speed = 1000;
+            const direction = this.cursor.pointer.clone().normalize();
+            this.scene.physics.add.image(this.cursor.x, this.cursor.y, 'logo')
+                .setScale(0.1, 0.1)
+                .setVelocity(speed * direction.x, speed * direction.y)
+            this.shootCooldown = 0.2;
         }
 
         this.x += moveX * moveSpeed * dt;

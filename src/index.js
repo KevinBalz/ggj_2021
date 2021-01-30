@@ -1,6 +1,7 @@
 import Phaser from 'phaser';
 import logoImg from './assets/logo.png';
 import Player from './player';
+import TargetCursor from './targetCursor';
 
 class MyGame extends Phaser.Scene
 {
@@ -16,13 +17,15 @@ class MyGame extends Phaser.Scene
       
     create ()
     {
-        this.player = this.add.existing(new Player(this, 400, 150));
+        this.player = this.add.existing(new Player(this, 400, 150)).setScale(0.4, 0.4);
+        this.player.cursor = this.targetCursor = this.add.existing(new TargetCursor(this, this.player));
     }
 
     update ()
     {
         let now = Date.now();
         let dt = (now - (this.lastFrame || 0)) / 1000;
+        this.targetCursor.update(dt);
         this.player.update(dt);
 
         this.lastFrame = now;
@@ -34,6 +37,10 @@ const config = {
     parent: 'phaser-example',
     width: 800,
     height: 600,
+    physics: {
+        default: 'arcade',
+        arcade: {}
+    },
     scene: MyGame
 };
 
