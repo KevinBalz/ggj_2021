@@ -24,6 +24,7 @@ export default class Player extends Phaser.GameObjects.Image {
         var obstacles = this.scene.physics.add.staticGroup();
         this.obstacle = obstacles.create(600, 500, 'logo');
         this.dashWasDown = this.scene.input.mousePointer.rightButtonDown();
+        this.dashing = false;
     }
 
     update(dt) {
@@ -64,17 +65,19 @@ export default class Player extends Phaser.GameObjects.Image {
             moveX += 1;
         }
 
-        if (!this.dashWasDown && this.scene.input.mousePointer.rightButtonDown()) {
+        if (!this.dashing && !this.dashWasDown && this.scene.input.mousePointer.rightButtonDown()) {
+            this.dashing = true;
             this.scene.tweens.add({
                 targets: this,
-                x: this.x + moveX * 100,
-                y: this.y + moveY * 100,
-                duration: 100
+                x: this.x + moveX * 200,
+                y: this.y + moveY * 200,
+                duration: 300,
+                onComplete: () => this.dashing = false
             });
             this.scene.sound.play('dash');
         }
 
-        if (this.scene.input.mousePointer.leftButtonDown() && this.shootCooldown <= 0) {
+        if (!this.dashing && this.scene.input.mousePointer.leftButtonDown() && this.shootCooldown <= 0) {
             const speed = 500;
             const off = new Phaser.Math.Vector2(50, 0 * (this.flipY ? -1 : 1)).rotate(this.rotation);
             const spawn = new Phaser.Math.Vector2(this.x + off.x, this.y + off.y);
