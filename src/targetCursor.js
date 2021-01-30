@@ -12,7 +12,7 @@ export default class TargetCursor extends Phaser.GameObjects.Image {
 
         scene.input.on('pointerdown', function (pointer) {
             if (!this.scene.input.mouse.locked) {
-                this.pointer = new Phaser.Math.Vector2(pointer.x - player.x, pointer.y - player.y);
+                this.pointer = new Phaser.Math.Vector2(pointer.x, pointer.y);
                 this.limitPointer();
             }
             scene.input.mouse.requestPointerLock();
@@ -36,13 +36,14 @@ export default class TargetCursor extends Phaser.GameObjects.Image {
 
     update(dt) {
         this.visible = this.scene.input.mouse.locked;
-        this.x = this.player.x + this.pointer.x;
-        this.y = this.player.y + this.pointer.y;
+        console.log(this.scene.cameras.main);
+        this.x = this.scene.cameras.main.scrollX + this.pointer.x;
+        this.y = this.scene.cameras.main.scrollY + this.pointer.y;
     }
 
     limitPointer() {
         //console.log(this.pointer.limit);
-        this.pointer.limit(targetRadius);
+        //this.pointer.limit(targetRadius);
     }
 
 }

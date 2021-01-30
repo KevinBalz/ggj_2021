@@ -1,5 +1,4 @@
 import Phaser from 'phaser';
-import logoImg from './assets/logo.png';
 import Player from './player';
 import TargetCursor from './targetCursor';
 
@@ -12,13 +11,19 @@ class MyGame extends Phaser.Scene
 
     preload ()
     {
-        this.load.image('logo', logoImg);
+        this.load.image('logo', 'src/assets/logo.png');
+        this.load.image('doggo', 'src/assets/sea_doggo.png');
+        this.load.image('doggo2', 'src/assets/sea_doggo-frame2.png');
+        this.load.image('doggo-rear', 'src/assets/sea_doggo-rearview.png');
+        this.load.image('bubble', 'src/assets/bubble.png');
+        this.load.audio('bark', 'src/assets/bark.wav');
     }
       
     create ()
     {
-        this.player = this.add.existing(new Player(this, 400, 150)).setScale(0.4, 0.4);
+        this.player = this.add.existing(new Player(this, 400, 150));
         this.player.cursor = this.targetCursor = this.add.existing(new TargetCursor(this, this.player));
+        this.cameras.main.startFollow(this.player, false, 0.1, 0.1);
     }
 
     update ()
