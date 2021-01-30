@@ -36,7 +36,6 @@ export default class TargetCursor extends Phaser.GameObjects.Image {
 
     update(dt) {
         this.visible = this.scene.input.mouse.locked;
-        console.log(this.scene.cameras.main);
         this.x = this.scene.cameras.main.scrollX + this.pointer.x;
         this.y = this.scene.cameras.main.scrollY + this.pointer.y;
     }
