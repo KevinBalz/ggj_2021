@@ -5,6 +5,7 @@ const moveSpeed = 100;
 export default class Player extends Phaser.GameObjects.Image {
     constructor(scene, x, y) {
         super(scene, x, y, 'doggo', 0);
+        this.life = 5;
         this.setScale(0.1, 0.1);
 
         this.keyW = scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W);
@@ -103,6 +104,12 @@ export default class Player extends Phaser.GameObjects.Image {
         this.x += moveX * moveSpeed * dt;
         this.y += moveY * moveSpeed * dt;
         this.dashWasDown = this.scene.input.mousePointer.rightButtonDown();
+    }
+
+    hurt() {
+        this.scene.sound.play('hurt');
+        this.scene.cameras.main.flash(5);
+        this.life--;
     }
 }
 function bulletHitObstacle(params) {

@@ -7,6 +7,7 @@ const normalScale = 0.1;
 export default class Enemy extends Phaser.GameObjects.Image {
     constructor(scene, x, y) {
         super(scene, x, y, 'pufferfish', 0);
+        this.life = 3;
         this.setScale(normalScale);
         this.shootCooldown = 0;
     }
@@ -42,6 +43,8 @@ export default class Enemy extends Phaser.GameObjects.Image {
             });
         }
 
+        if (this.wasTinted) this.clearTint();
+        this.wasTinted = this.tintFill;
     }
 
     startBlowDown() {
@@ -53,10 +56,17 @@ export default class Enemy extends Phaser.GameObjects.Image {
             onCompleteParams: [ this ]
         });
     }
+
+    hurt() {
+        this.life--;
+        this.setTintFill();
+        this.scene.sound.play('hit');
+    }
 }
 
 function onCompleteBlowDown(tween, targets, enemy)
 {
+    if (enemy === undefined) return;
     delete enemy.blowDown;
 }
 
@@ -65,6 +75,7 @@ const bulletSpeed = 100;
 
 function onCompleteBlowUp(tween, targets, enemy)
 {
+    if (enemy === undefined) return;
     delete enemy.blowUp;
     for (let i = 0; i < 8; i++) {
         let rad = i * Math.PI / 4;
@@ -77,7 +88,7 @@ function onCompleteBlowUp(tween, targets, enemy)
         .setFlipX(true);
     }
 
-    enemy.scene.sound.play('puff')
+    enemy.scene.sound.play('puff');
     enemy.startBlowDown();
     enemy.shootCooldown = 1.5;
 }

@@ -1,13 +1,14 @@
 import Phaser from 'phaser';
 import Player from './player';
 import Enemy from './enemy';
+import UIScene from './ui';
 import TargetCursor from './targetCursor';
 
 class MyGame extends Phaser.Scene
 {
     constructor ()
     {
-        super();
+        super('main');
     }
 
     preload ()
@@ -16,12 +17,15 @@ class MyGame extends Phaser.Scene
         this.load.image('doggo', 'src/assets/sea_doggo.png');
         this.load.image('doggo2', 'src/assets/sea_doggo-frame2.png');
         this.load.image('doggo-rear', 'src/assets/sea_doggo-rearview.png');
+        this.load.image('doggo-life', 'src/assets/sea_doggo-life.png');
         this.load.image('bubble', 'src/assets/bubble.png');
         this.load.image('pufferfish', 'src/assets/kugelfisch.png');
         this.load.image('pufferfishSpike', 'src/assets/kugelfisch-bullet.png');
         this.load.audio('bark', 'src/assets/bark.wav');
         this.load.audio('puff', 'src/assets/puff.wav');
         this.load.audio('dash', 'src/assets/dash.wav');
+        this.load.audio('hit', 'src/assets/hit.wav');
+        this.load.audio('hurt', 'src/assets/hurt.wav');
     }
       
     create ()
@@ -30,6 +34,8 @@ class MyGame extends Phaser.Scene
         this.player.cursor = this.targetCursor = this.add.existing(new TargetCursor(this, this.player)).setDepth(999999999999);
         this.cameras.main.startFollow(this.player, false, 0.1, 0.1);
         this.enemy = this.add.existing(new Enemy(this, 400, 150));
+
+        this.scene.run('ui');
     }
 
     update ()
@@ -53,7 +59,7 @@ const config = {
         default: 'arcade',
         arcade: {}
     },
-    scene: MyGame
+    scene: [MyGame, UIScene]
 };
 
 const game = new Phaser.Game(config);
