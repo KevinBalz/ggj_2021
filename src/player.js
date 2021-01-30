@@ -37,11 +37,14 @@ export default class Player extends Phaser.GameObjects.Image {
         if (this.angle < 0) {
             this.setTexture('doggo-rear');
         }
+        else if (this.angle > 45 && this.angle < 135) {
+            this.setTexture('doggoDown');
+        }
         else if (this.texture.key !== 'doggo' && this.texture.key !== 'doggo2'){
             this.setTexture('doggo');
         }
 
-        if (this.angle > -90 && this.angle < 90) {
+        if ((this.angle > -90 && this.angle < 90) || (this.texture.key !== 'doggo' && this.texture.key !== 'doggo2' && this.texture.key !== 'doggo-rear')) {
             this.flipY = false;
         }
         else {
@@ -49,8 +52,8 @@ export default class Player extends Phaser.GameObjects.Image {
         }
 
         if (this.animCooldown <= 0 && (this.texture.key === 'doggo' || this.texture.key === 'doggo2')) {
-            this.setTexture(this.texture.key === 'doggo' ? 'doggo2' : 'doggo');
-            this.animCooldown = 0.5;
+            //this.setTexture(this.texture.key === 'doggo' ? 'doggo2' : 'doggo');
+            //this.animCooldown = 0.5;
         }
 
         if (this.keyW.isDown || this.keyUp.isDown) {

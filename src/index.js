@@ -5,8 +5,10 @@ import UIScene from './ui';
 import TargetCursor from './targetCursor';
 
 import logoImg from './assets/logo.png';
-import doggoImg from './assets/sea_doggo.png';
-import doggo2Img from './assets/sea_doggo-frame2.png';
+import doggoImg from './assets/sea_doggo-sideview.png';
+import doggo2Img from './assets/sea_doggo-sideview.png';
+import doggoDownImg from './assets/sea_doggo-downwards.png';
+import doggoDown2Img from './assets/sea_doggo-frame2.png';
 import doggo_rearImg from './assets/sea_doggo-rearview.png';
 import bubbleImg from './assets/bubble.png';
 import pufferfishImg from './assets/kugelfisch.png';
@@ -34,6 +36,8 @@ class MyGame extends Phaser.Scene
         this.load.image('logo', logoImg);
         this.load.image('doggo', doggoImg);
         this.load.image('doggo2', doggo2Img);
+        this.load.image('doggoDown', doggoDownImg);
+        this.load.image('doggoDown2', doggoDown2Img);
         this.load.image('doggo-rear', doggo_rearImg);
         this.load.image('bubble', bubbleImg);
         this.load.image('pufferfish', pufferfishImg);
@@ -64,7 +68,7 @@ class MyGame extends Phaser.Scene
         // Karte skalieren, damit es zur Figur passt
         layer1.setScale(0.5);
         layer2.setScale(0.5);
-        layer3.setScale(0.5);
+        layer3.setScale(0.5).setDepth(9999);
 
         this.player = this.add.existing(new Player(this, 400, 150));
         this.player.cursor = this.targetCursor = this.add.existing(new TargetCursor(this, this.player)).setDepth(999999999999);
