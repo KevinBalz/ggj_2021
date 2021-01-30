@@ -18,6 +18,10 @@ import hitClip from './assets/hit.wav';
 import hurtClip from './assets/hurt.wav';
 import mainTheme from './assets/sea_doggo_theme-mastered.mp3';
 
+import tilesPng from './assets/map/Tilemap.png';
+import tiles2Png from './assets/map/Tilemap2.png';
+import tilemapTiledJSON from './assets/map/Testmap2.json';
+
 class MyGame extends Phaser.Scene
 {
     constructor ()
@@ -41,9 +45,9 @@ class MyGame extends Phaser.Scene
         this.load.audio('hurt', hurtClip);
         this.load.audio('theme', mainTheme);
 
-        this.load.image('tiles', 'src/assets/map/Tilemap.png');
-        this.load.image('tiles2', 'src/assets/map/Tilemap2.png');
-        this.load.tilemapTiledJSON('map', 'src/assets/map/Testmap2.json');
+        this.load.image('tiles', tilesPng);
+        this.load.image('tiles2', tiles2Png);
+        this.load.tilemapTiledJSON('map', tilemapTiledJSON);
     }
       
     create ()
