@@ -5,6 +5,7 @@ import UIScene from './ui';
 import TargetCursor from './targetCursor';
 import Obstacle from './obstacle.js'
 import TitleScene from './titlescreen';
+import EndScene from './endscreen';
 
 import logoImg from './assets/logo.png';
 import doggoImg from './assets/sea_doggo-sideview.png';
@@ -182,7 +183,7 @@ const config = {
         default: 'arcade',
         arcade: {debug: false},
     },
-    scene: [TitleScene, MyGame, UIScene]
+    scene: [TitleScene, MyGame, UIScene, EndScene]
 };
 
 const game = new Phaser.Game(config);

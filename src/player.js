@@ -28,7 +28,7 @@ export default class Player extends Phaser.Physics.Arcade.Image {
 
     update(dt) {
         if (Math.abs(new Phaser.Math.Vector2(this.x - goalPoint.x, this.y - goalPoint.y).length()) < goalDistance) {
-            alert('you won!');
+            this.scene.scene.start('EndScene');
             goalDistance = -1;
         }
         let moveX = 0;
