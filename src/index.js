@@ -27,6 +27,7 @@ import mainTheme from './assets/sea_doggo_theme-mastered.mp3';
 
 import tilesPng from './assets/map/Tilemap.png';
 import tiles2Png from './assets/map/Tilemap2.png';
+import tiles3Png from './assets/map/Tilemap3.png';
 import tilemapTiledJSON from './assets/map/Testmap2.json';
 
 class MyGame extends Phaser.Scene
@@ -61,6 +62,7 @@ class MyGame extends Phaser.Scene
 
         this.load.image('tiles', tilesPng);
         this.load.image('tiles2', tiles2Png);
+        this.load.image('tiles3', tiles3Png);
         this.load.tilemapTiledJSON('map', tilemapTiledJSON);
     }
       
@@ -73,12 +75,13 @@ class MyGame extends Phaser.Scene
         var map = this.add.tilemap('map');
         var tileset1 = map.addTilesetImage('Tilemap', 'tiles');
         var tileset2 = map.addTilesetImage('Tilemap2', 'tiles2');
+        var tileset3 = map.addTilesetImage('Tilemap3', 'tiles3');
         // Bodenlayer
-        var layer1 = map.createLayer('ground', [ tileset1, tileset2 ]);
+        var layer1 = map.createLayer('ground', [ tileset1, tileset2, tileset3 ]);
         // Hindernisse, diese Tiles können nicht betreten werden
-        var layer2 = map.createLayer('impassable', [ tileset1, tileset2 ]);
+        var layer2 = map.createLayer('impassable', [ tileset1, tileset2, tileset3 ]);
         // Kosmetische Tiles, hoher Anteil von Hindernissen, der den Spieler verdeckt.
-        var layer3 = map.createLayer('passable', [ tileset1, tileset2 ]);
+        var layer3 = map.createLayer('passable', [ tileset1, tileset2, tileset3 ]);
 
         this.staticGroup = this.physics.add.staticGroup();
         this.enemyGroup = this.physics.add.group();
