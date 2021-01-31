@@ -26,8 +26,9 @@ export default class Enemy extends Phaser.Physics.Arcade.Image {
             if (!this.blowDown) {
                 const direction = diff.normalize();
 
-                this.x += direction.x * movementSpeed * dt;
-                this.y += direction.y * movementSpeed * dt;
+                this.body.setVelocity(direction.x * movementSpeed, direction.y * movementSpeed)
+                //this.x += direction.x * movementSpeed * dt;
+                //this.y += direction.y * movementSpeed * dt;
             }
         }
         else if (!this.blowUp && this.shootCooldown <= 0) {
