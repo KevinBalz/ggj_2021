@@ -79,6 +79,7 @@ class MyGame extends Phaser.Scene
         obstacleGroup = this.physics.add.group();
 
         var map = this.add.tilemap('map');
+        map.setRenderOrder(1);
         var tileset1 = map.addTilesetImage('Tilemap', 'tiles');
         var tileset2 = map.addTilesetImage('Tilemap2', 'tiles2');
         var tileset3 = map.addTilesetImage('Tilemap3', 'tiles3');
