@@ -19,13 +19,8 @@ export default class Bubble extends Phaser.Physics.Arcade.Image {
         const bubble = this.scene.physics.add.image(player.x + off.x, player.y + off.y, 'bubble')
         
         player.scene.getBubbleGroup().add(bubble);
-
         bubble.setScale(0.025, 0.025)
-                .setVelocity(speed * direction.x, speed * direction.y)
-
-        player.scene.cameras.main.shake(40, 0.025);
-        //this.scene.cameras.main.flash(1, 100, 100, 255);
-        player.scene.sound.play(sound);
+            .setVelocity(speed * direction.x, speed * direction.y)
 
         player.scene.tweens.add({
             targets: bubble,

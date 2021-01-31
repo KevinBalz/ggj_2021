@@ -21,10 +21,7 @@ export default class Player extends Phaser.Physics.Arcade.Image {
 
         this.shootCooldown = 0;
         this.animCooldown = 0;
-        this.dashWasDown = scene.input.mousePointer.rightButtonDown();
-
-        this.dashWasDown = this.scene.input.mousePointer.rightButtonDown();
-        this.dashing = false;
+        this.dashCooldown = 0;
     }
 
     update(dt) {
@@ -32,6 +29,7 @@ export default class Player extends Phaser.Physics.Arcade.Image {
         let moveY = 0;
         this.shootCooldown -= dt;
         this.animCooldown -= dt;
+        this.dashCooldown -= dt;
         this.rotation = Math.atan2(this.cursor.y - this.y, this.cursor.x - this.x);
         if (this.angle < 0) {
             this.setTexture('doggo-rear');
@@ -68,19 +66,13 @@ export default class Player extends Phaser.Physics.Arcade.Image {
             moveX += 1;
         }
 
-        if (!this.dashing && !this.dashWasDown && this.scene.input.mousePointer.rightButtonDown()) {
-            this.dashing = true;
-            this.scene.tweens.add({
-                targets: this,
-                x: this.x + moveX * 200,
-                y: this.y + moveY * 200,
-                duration: 300,
-                onComplete: () => this.dashing = false
-            });
+        if (this.dashCooldown <= 0 && this.scene.input.mousePointer.rightButtonDown()) {
+            this.dashCooldown = 0.3;
+            this.body.setVelocity(moveX * moveSpeed * 30, moveY * moveSpeed * 30);
             this.scene.sound.play('dash');
         }
 
-        if (!this.dashing && this.scene.input.mousePointer.leftButtonDown() && this.shootCooldown <= 0) {
+        if (!this.dashing && this.scene.input.mousePointer.leftButtonDown() && this.shootCooldown <= 0 && this.dashCooldown <= 0 ) {
             const speed = 1000;
             var bubble = this.scene.add.existing(new Bubble(this.scene, this.x, this.y));
             bubble.shootBubble(speed, this, 'bark');
@@ -106,10 +98,9 @@ export default class Player extends Phaser.Physics.Arcade.Image {
         }
 
 
-        this.body.setVelocity(moveX * moveSpeed, moveY * moveSpeed);
-        //this.x += moveX * moveSpeed * dt;
-        //this.y += moveY * moveSpeed * dt;
-        this.dashWasDown = this.scene.input.mousePointer.rightButtonDown();
+        //player.speed.x = moveX = acceleration * moveX + (1 - acceleration) * player.speed.x;
+        const acceleration = 0.2;
+        this.body.setVelocity(acceleration * moveX * moveSpeed + (1 - acceleration) * (this.body.velocity.x || 0), acceleration * moveY * moveSpeed + (1 - acceleration) * (this.body.velocity.y || 0));
     }
 
     hurt() {
