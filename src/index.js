@@ -28,7 +28,7 @@ import tilesPng from './assets/map/Tilemap.png';
 import tiles2Png from './assets/map/Tilemap2.png';
 import tiles3Png from './assets/map/Tilemap3.png';
 import atlantisPng from './assets/map/Atlantis.png';
-import tilemapTiledJSON from './assets/map/Testmap2.json';
+import tilemapTiledJSON from './assets/map/Testmap3.json';
 
 class MyGame extends Phaser.Scene
 {
@@ -94,7 +94,7 @@ class MyGame extends Phaser.Scene
         layer3.setScale(0.5).setDepth(9990);
         layer4.setScale(0.5).setDepth(9991);
         layer5.setScale(0.5).setDepth(9992);
-        /*
+        
         for (var i = 0; i < layer2.layer.data.length; i++) {
             const d = layer2.layer.data[i];
             for (var j = 0; j < d.length; j++) {
@@ -103,10 +103,10 @@ class MyGame extends Phaser.Scene
                 const body = this.physics.add.staticImage(tile.pixelX/2 + tile.width/4, tile.pixelY/2 + tile.height/8,'tileCollider').setScale(0.25, 0.25).refreshBody();
                 this.staticGroup.add(body);
             }
-        }*/
+        }
 
         // Zum Testen, bessere Übersicht.
-        // this.cameras.main.setZoom(0.1);
+        //this.cameras.main.setZoom(0.1);
 
         this.player = this.physics.add.existing(new Player(this, 400, 150));
         this.add.existing(this.player);
