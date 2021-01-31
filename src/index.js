@@ -4,6 +4,7 @@ import Enemy from './enemy';
 import UIScene from './ui';
 import TargetCursor from './targetCursor';
 import Obstacle from './obstacle.js'
+import TitleScene from './titlescreen';
 
 import logoImg from './assets/logo.png';
 import doggoImg from './assets/sea_doggo-sideview.png';
@@ -35,7 +36,7 @@ class MyGame extends Phaser.Scene
 {
     constructor ()
     {
-        super('main');
+        super('main', { key: 'game' });
         this.enemies = [];
     }
 
@@ -181,7 +182,7 @@ const config = {
         default: 'arcade',
         arcade: {debug: false},
     },
-    scene: [MyGame, UIScene]
+    scene: [TitleScene, MyGame, UIScene]
 };
 
 const game = new Phaser.Game(config);
