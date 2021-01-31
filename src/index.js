@@ -12,6 +12,7 @@ import doggo2Img from './assets/sea_doggo-sideview.png';
 import doggoDownImg from './assets/sea_doggo-downwards.png';
 import doggoDown2Img from './assets/sea_doggo-frame2.png';
 import doggo_rearImg from './assets/sea_doggo-rearview.png';
+import doggo_deadImg from './assets/sea_doggo-dead.png';
 import bubbleImg from './assets/bubble.png';
 import pufferfishImg from './assets/kugelfisch.png';
 import pufferfishSpikeImg from './assets/kugelfisch-bullet.png';
@@ -23,10 +24,12 @@ import dashClip from './assets/dash.wav';
 import hitClip from './assets/hit.wav';
 import hurtClip from './assets/hurt.wav';
 import popClip from './assets/pop.wav';
+import dedClip from './assets/ded.wav';
 import mainTheme from './assets/sea_doggo_theme-mastered.mp3';
 
 import tilesPng from './assets/map/Tilemap.png';
 import tiles2Png from './assets/map/Tilemap2.png';
+import tiles3Png from './assets/map/Tilemap3.png';
 import tilemapTiledJSON from './assets/map/Testmap2.json';
 
 class MyGame extends Phaser.Scene
@@ -45,6 +48,7 @@ class MyGame extends Phaser.Scene
         this.load.image('doggoDown', doggoDownImg);
         this.load.image('doggoDown2', doggoDown2Img);
         this.load.image('doggo-rear', doggo_rearImg);
+        this.load.image('doggo-dead', doggo_deadImg);
         this.load.image('bubble', bubbleImg);
         this.load.image('pufferfish', pufferfishImg);
         this.load.image('pufferfishSpike', pufferfishSpikeImg);
@@ -56,10 +60,12 @@ class MyGame extends Phaser.Scene
         this.load.audio('hit', hitClip);
         this.load.audio('hurt', hurtClip);
         this.load.audio('pop', popClip);
+        this.load.audio('ded', dedClip);
         this.load.audio('theme', mainTheme);
 
         this.load.image('tiles', tilesPng);
         this.load.image('tiles2', tiles2Png);
+        this.load.image('tiles3', tiles3Png);
         this.load.tilemapTiledJSON('map', tilemapTiledJSON);
     }
       
@@ -72,12 +78,13 @@ class MyGame extends Phaser.Scene
         var map = this.add.tilemap('map');
         var tileset1 = map.addTilesetImage('Tilemap', 'tiles');
         var tileset2 = map.addTilesetImage('Tilemap2', 'tiles2');
+        var tileset3 = map.addTilesetImage('Tilemap3', 'tiles3');
         // Bodenlayer
-        var layer1 = map.createLayer('ground', [ tileset1, tileset2 ]);
+        var layer1 = map.createLayer('ground', [ tileset1, tileset2, tileset3 ]);
         // Hindernisse, diese Tiles können nicht betreten werden
-        var layer2 = map.createLayer('impassable', [ tileset1, tileset2 ]);
+        var layer2 = map.createLayer('impassable', [ tileset1, tileset2, tileset3 ]);
         // Kosmetische Tiles, hoher Anteil von Hindernissen, der den Spieler verdeckt.
-        var layer3 = map.createLayer('passable', [ tileset1, tileset2 ]);
+        var layer3 = map.createLayer('passable', [ tileset1, tileset2, tileset3 ]);
 
         this.staticGroup = this.physics.add.staticGroup();
         this.enemyGroup = this.physics.add.group();
@@ -100,10 +107,22 @@ class MyGame extends Phaser.Scene
         this.add.existing(this.player);
         this.player.cursor = this.targetCursor = this.add.existing(new TargetCursor(this, this.player)).setDepth(999999999999);
         this.cameras.main.startFollow(this.player, false, 0.1, 0.1);
-        var enemy = this.physics.add.existing(new Enemy(this, 400, 150));
-        this.add.existing(enemy);
-        this.enemyGroup.add(enemy);
-        this.enemies.push(enemy);
+
+        const spawnEnemy = (x, y) => {
+            var enemy = this.physics.add.existing(new Enemy(this, x, y));
+            this.add.existing(enemy);
+            this.enemyGroup.add(enemy);
+            this.enemies.push(enemy);
+        }
+        spawnEnemy(400, 150);
+        spawnEnemy(200, 400);
+        spawnEnemy(600, 1000);
+        spawnEnemy(700, 150);
+
+        spawnEnemy(1400, 150);
+        spawnEnemy(1200, 400);
+        spawnEnemy(1600, 1000);
+        spawnEnemy(1700, 150);
 
         this.bulletGroup = this.physics.add.group();
         this.physics.add.collider(this.player, this.staticGroup);
@@ -124,7 +143,7 @@ class MyGame extends Phaser.Scene
         let now = Date.now();
         let dt = (now - (this.lastFrame || 0)) / 1000;
         this.targetCursor.update(dt);
-        this.player.update(dt);
+        this.player && this.player.update(dt);
         this.enemies.forEach(e => e.update(dt));
 
         this.enemies = this.enemies.filter(e => {

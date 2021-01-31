@@ -13,6 +13,7 @@ export default class Enemy extends Phaser.Physics.Arcade.Image {
     }
 
     update(dt) {
+        if (!this.scene.player) return;
         this.shootCooldown -= dt;
         const diff = new Phaser.Math.Vector2(this.scene.player.x - this.x, this.scene.player.y - this.y);
         if (diff.length() > targetDistance) {
