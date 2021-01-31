@@ -31,7 +31,8 @@ import mainTheme from './assets/sea_doggo_theme-mastered.mp3';
 import tilesPng from './assets/map/Tilemap.png';
 import tiles2Png from './assets/map/Tilemap2.png';
 import tiles3Png from './assets/map/Tilemap3.png';
-import tilemapTiledJSON from './assets/map/Testmap2.json';
+import atlantisPng from './assets/map/Atlantis.png';
+import tilemapTiledJSON from './assets/map/Testmap3.json';
 
 class MyGame extends Phaser.Scene
 {
@@ -67,6 +68,7 @@ class MyGame extends Phaser.Scene
         this.load.image('tiles', tilesPng);
         this.load.image('tiles2', tiles2Png);
         this.load.image('tiles3', tiles3Png);
+        this.load.image('atlantis', atlantisPng);
         this.load.tilemapTiledJSON('map', tilemapTiledJSON);
     }
       
@@ -80,20 +82,25 @@ class MyGame extends Phaser.Scene
         var tileset1 = map.addTilesetImage('Tilemap', 'tiles');
         var tileset2 = map.addTilesetImage('Tilemap2', 'tiles2');
         var tileset3 = map.addTilesetImage('Tilemap3', 'tiles3');
+        var atlantis = map.addTilesetImage('Atlantis', 'atlantis');
         // Bodenlayer
         var layer1 = map.createLayer('ground', [ tileset1, tileset2, tileset3 ]);
         // Hindernisse, diese Tiles können nicht betreten werden
-        var layer2 = map.createLayer('impassable', [ tileset1, tileset2, tileset3 ]);
+        var layer2 = map.createLayer('impassable', [ tileset1, tileset2, tileset3, atlantis ]);
         // Kosmetische Tiles, hoher Anteil von Hindernissen, der den Spieler verdeckt.
         var layer3 = map.createLayer('passable', [ tileset1, tileset2, tileset3 ]);
+        var layer4 = map.createLayer('passable2', [ tileset1, tileset2, tileset3 ]);
+        var layer5 = map.createLayer('passable3', [ tileset1, tileset2, tileset3 ]);
 
         this.staticGroup = this.physics.add.staticGroup();
         this.enemyGroup = this.physics.add.group();
         // Karte skalieren, damit es zur Figur passt
         layer1.setScale(0.5);
         layer2.setScale(0.5);
-        layer3.setScale(0.5).setDepth(9999);
-
+        layer3.setScale(0.5).setDepth(9990);
+        layer4.setScale(0.5).setDepth(9991);
+        layer5.setScale(0.5).setDepth(9992);
+        
         for (var i = 0; i < layer2.layer.data.length; i++) {
             const d = layer2.layer.data[i];
             for (var j = 0; j < d.length; j++) {
@@ -103,6 +110,9 @@ class MyGame extends Phaser.Scene
                 this.staticGroup.add(body);
             }
         }
+
+        // Zum Testen, bessere Übersicht.
+        //this.cameras.main.setZoom(0.1);
 
         this.player = this.physics.add.existing(new Player(this, 400, 150));
         this.add.existing(this.player);
