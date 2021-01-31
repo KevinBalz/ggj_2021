@@ -1,7 +1,7 @@
 import Phaser from "phaser";
 
-const movementSpeed = 20;
-const targetDistance = 300;
+const movementSpeed = 40;
+const targetDistance = 350;
 const normalScale = 0.1;
 
 export default class Enemy extends Phaser.Physics.Arcade.Image {
@@ -37,7 +37,7 @@ export default class Enemy extends Phaser.Physics.Arcade.Image {
             this.blowUp = this.scene.tweens.add({
                 targets: this,
                 scale: normalScale * 2,
-                duration: 3000,
+                duration: 1500,
                 onComplete: onCompleteBlowUp,
                 onCompleteParams: [ this ]
             });

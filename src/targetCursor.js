@@ -4,7 +4,7 @@ const targetRadius = 100;
 
 export default class TargetCursor extends Phaser.GameObjects.Image {
     constructor(scene, player) {
-        super(scene, 0, 0, 'logo', 0)
+        super(scene, 0, 0, 'cursor', 0)
         this.setScale(0.1, 0.1);
         this.setVisible(false);
         this.player = player;
