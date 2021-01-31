@@ -174,6 +174,7 @@ class MyGame extends Phaser.Scene
 }
 
 function bubbleHitObstacle(bubble, obstacle) {
+    if (!(bubble && bubble.scene)) return;
     bubble.scene.sound.play('pop');
     bubble.scene.cameras.main.shake(40, 0.01);
     bubble.destroy();

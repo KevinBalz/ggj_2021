@@ -2,7 +2,7 @@ import Phaser from "phaser";
 import Bubble from "./bubble";
 
 const moveSpeed = 100;
-const goalPoint = new Phaser.Math.Vector2(-100, -100);
+const goalPoint = new Phaser.Math.Vector2(14923, 3052);
 let goalDistance = 100;
 
 export default class Player extends Phaser.Physics.Arcade.Image {
