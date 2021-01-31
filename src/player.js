@@ -113,6 +113,7 @@ export default class Player extends Phaser.Physics.Arcade.Image {
             this.scene.sound.play('ded');
             this.scene.sound.play('ded');
             this.scene.sound.play('ded');
+            this.scene.add.image(this.x, this.y, 'doggo-dead').setScale(0.1);
             this.destroy();
         }
         else {

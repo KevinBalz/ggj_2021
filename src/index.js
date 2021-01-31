@@ -11,6 +11,7 @@ import doggo2Img from './assets/sea_doggo-sideview.png';
 import doggoDownImg from './assets/sea_doggo-downwards.png';
 import doggoDown2Img from './assets/sea_doggo-frame2.png';
 import doggo_rearImg from './assets/sea_doggo-rearview.png';
+import doggo_deadImg from './assets/sea_doggo-dead.png';
 import bubbleImg from './assets/bubble.png';
 import pufferfishImg from './assets/kugelfisch.png';
 import pufferfishSpikeImg from './assets/kugelfisch-bullet.png';
@@ -46,6 +47,7 @@ class MyGame extends Phaser.Scene
         this.load.image('doggoDown', doggoDownImg);
         this.load.image('doggoDown2', doggoDown2Img);
         this.load.image('doggo-rear', doggo_rearImg);
+        this.load.image('doggo-dead', doggo_deadImg);
         this.load.image('bubble', bubbleImg);
         this.load.image('pufferfish', pufferfishImg);
         this.load.image('pufferfishSpike', pufferfishSpikeImg);
