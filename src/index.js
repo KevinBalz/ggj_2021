@@ -104,10 +104,22 @@ class MyGame extends Phaser.Scene
         this.add.existing(this.player);
         this.player.cursor = this.targetCursor = this.add.existing(new TargetCursor(this, this.player)).setDepth(999999999999);
         this.cameras.main.startFollow(this.player, false, 0.1, 0.1);
-        var enemy = this.physics.add.existing(new Enemy(this, 400, 150));
-        this.add.existing(enemy);
-        this.enemyGroup.add(enemy);
-        this.enemies.push(enemy);
+
+        const spawnEnemy = (x, y) => {
+            var enemy = this.physics.add.existing(new Enemy(this, x, y));
+            this.add.existing(enemy);
+            this.enemyGroup.add(enemy);
+            this.enemies.push(enemy);
+        }
+        spawnEnemy(400, 150);
+        spawnEnemy(200, 400);
+        spawnEnemy(600, 1000);
+        spawnEnemy(700, 150);
+
+        spawnEnemy(1400, 150);
+        spawnEnemy(1200, 400);
+        spawnEnemy(1600, 1000);
+        spawnEnemy(1700, 150);
 
         this.bulletGroup = this.physics.add.group();
         this.physics.add.collider(this.player, this.staticGroup);
