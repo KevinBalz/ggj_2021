@@ -13,6 +13,7 @@ export default class Enemy extends Phaser.Physics.Arcade.Image {
     }
 
     update(dt) {
+        //return;
         if (!this.scene.player) return;
         this.shootCooldown -= dt;
         const diff = new Phaser.Math.Vector2(this.scene.player.x - this.x, this.scene.player.y - this.y);
@@ -21,6 +22,7 @@ export default class Enemy extends Phaser.Physics.Arcade.Image {
                 this.blowUp.stop();
                 delete this.blowUp;
                 this.startBlowDown();
+                this.body.setVelocity(0);
                 return;
             }
             if (!this.blowDown) {
@@ -30,8 +32,12 @@ export default class Enemy extends Phaser.Physics.Arcade.Image {
                 //this.x += direction.x * movementSpeed * dt;
                 //this.y += direction.y * movementSpeed * dt;
             }
+            else {
+                this.body.setVelocity(0);
+            }
         }
         else if (!this.blowUp && this.shootCooldown <= 0) {
+            this.body.setVelocity(0);
             if (this.blowDown) {
                 this.blowDown.stop();
                 delete this.blowDown;
@@ -43,6 +49,9 @@ export default class Enemy extends Phaser.Physics.Arcade.Image {
                 onComplete: onCompleteBlowUp,
                 onCompleteParams: [ this ]
             });
+        }
+        else {
+            this.body.setVelocity(0);
         }
 
         if (this.wasTinted) this.clearTint();

@@ -130,6 +130,20 @@ class MyGame extends Phaser.Scene
         spawnEnemy(4710, 1521);
         spawnEnemy(4446, 2166);
         spawnEnemy(5153, 1847);
+        spawnEnemy(5646, 1534);
+        spawnEnemy(5650, 1119);
+        spawnEnemy(6134, 2158);
+        spawnEnemy(5868, 2543);
+        spawnEnemy(6014, 3003);
+        spawnEnemy(5805, 3465);
+        spawnEnemy(6719, 2418);
+        spawnEnemy(7612, 1102);
+        spawnEnemy(8854, 2316);
+        spawnEnemy(10830, 1633);
+        spawnEnemy(12572, 2516);
+        spawnEnemy(14346, 3274);
+        spawnEnemy(14246, 3224);
+        spawnEnemy(14446, 3224);
 
         this.bulletGroup = this.physics.add.group();
         this.physics.add.collider(this.player, this.staticGroup);
