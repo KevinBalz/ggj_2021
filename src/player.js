@@ -2,6 +2,8 @@ import Phaser from "phaser";
 import Bubble from "./bubble";
 
 const moveSpeed = 100;
+const goalPoint = new Phaser.Math.Vector2(-100, -100);
+let goalDistance = 100;
 
 export default class Player extends Phaser.Physics.Arcade.Image {
     constructor(scene, x, y) {
@@ -25,6 +27,10 @@ export default class Player extends Phaser.Physics.Arcade.Image {
     }
 
     update(dt) {
+        if (Math.abs(new Phaser.Math.Vector2(this.x - goalPoint.x, this.y - goalPoint.y).length()) < goalDistance) {
+            alert('you won!');
+            goalDistance = -1;
+        }
         let moveX = 0;
         let moveY = 0;
         this.shootCooldown -= dt;
