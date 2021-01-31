@@ -3,6 +3,7 @@ import Player from './player';
 import Enemy from './enemy';
 import UIScene from './ui';
 import TargetCursor from './targetCursor';
+import Obstacle from './obstacle.js'
 
 import logoImg from './assets/logo.png';
 import doggoImg from './assets/sea_doggo-sideview.png';
@@ -56,6 +57,11 @@ class MyGame extends Phaser.Scene
       
     create ()
     {
+        // physics Gruppen
+        bubbleGroup = this.physics.add.group();
+        obstacleGroup = this.physics.add.group();
+        this.physics.add.overlap(obstacleGroup, bubbleGroup, bubbleHitObstacle, null, this);
+
         var map = this.add.tilemap('map');
         var tileset1 = map.addTilesetImage('Tilemap', 'tiles');
         var tileset2 = map.addTilesetImage('Tilemap2', 'tiles2');
@@ -75,6 +81,9 @@ class MyGame extends Phaser.Scene
         this.cameras.main.startFollow(this.player, false, 0.1, 0.1);
         this.enemy = this.add.existing(new Enemy(this, 400, 150));
 
+        var obstacle = this.add.existing(new Obstacle(this, 600, 500));
+        obstacle.setObstacleGroup(obstacleGroup);
+
         this.scene.run('ui');
 
         var music = this.sound.add('theme');
@@ -91,7 +100,17 @@ class MyGame extends Phaser.Scene
 
         this.lastFrame = now;
     }
+
+    getBubbleGroup(){
+        return bubbleGroup;
+    }
 }
+
+function bubbleHitObstacle(bubble, obstacle) {
+    bubble.destroy();
+    obstacle.destroy();
+}
+
 
 const config = {
     type: Phaser.AUTO,
@@ -106,3 +125,6 @@ const config = {
 };
 
 const game = new Phaser.Game(config);
+
+var bubbleGroup;
+var obstacleGroup;
