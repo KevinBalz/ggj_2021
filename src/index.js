@@ -114,7 +114,7 @@ class MyGame extends Phaser.Scene
         // Zum Testen, bessere Übersicht.
         //this.cameras.main.setZoom(0.1);
 
-        this.player = this.physics.add.existing(new Player(this, 400, 150));
+        this.player = this.physics.add.existing(new Player(this, 3900, 1700));
         this.add.existing(this.player);
         this.player.cursor = this.targetCursor = this.add.existing(new TargetCursor(this, this.player)).setDepth(999999999999);
         this.cameras.main.startFollow(this.player, false, 0.1, 0.1);
