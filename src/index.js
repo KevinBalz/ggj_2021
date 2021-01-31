@@ -14,6 +14,7 @@ import doggo_rearImg from './assets/sea_doggo-rearview.png';
 import bubbleImg from './assets/bubble.png';
 import pufferfishImg from './assets/kugelfisch.png';
 import pufferfishSpikeImg from './assets/kugelfisch-bullet.png';
+import tileColliderImg from './assets/tile-collider.png';
 import barkClip from './assets/bark.wav';
 import puffClip from './assets/puff.wav';
 import dashClip from './assets/dash.wav';
@@ -30,6 +31,7 @@ class MyGame extends Phaser.Scene
     constructor ()
     {
         super('main');
+        this.enemies = [];
     }
 
     preload ()
@@ -43,6 +45,7 @@ class MyGame extends Phaser.Scene
         this.load.image('bubble', bubbleImg);
         this.load.image('pufferfish', pufferfishImg);
         this.load.image('pufferfishSpike', pufferfishSpikeImg);
+        this.load.image('tileCollider', tileColliderImg);
         this.load.audio('bark', barkClip);
         this.load.audio('puff', puffClip);
         this.load.audio('dash', dashClip);
@@ -60,7 +63,6 @@ class MyGame extends Phaser.Scene
         // physics Gruppen
         bubbleGroup = this.physics.add.group();
         obstacleGroup = this.physics.add.group();
-        this.physics.add.overlap(obstacleGroup, bubbleGroup, bubbleHitObstacle, null, this);
 
         var map = this.add.tilemap('map');
         var tileset1 = map.addTilesetImage('Tilemap', 'tiles');
@@ -71,18 +73,39 @@ class MyGame extends Phaser.Scene
         var layer2 = map.createLayer('impassable', [ tileset1, tileset2 ]);
         // Kosmetische Tiles, hoher Anteil von Hindernissen, der den Spieler verdeckt.
         var layer3 = map.createLayer('passable', [ tileset1, tileset2 ]);
+
+        this.staticGroup = this.physics.add.staticGroup();
+        this.enemyGroup = this.physics.add.group();
         // Karte skalieren, damit es zur Figur passt
         layer1.setScale(0.5);
         layer2.setScale(0.5);
         layer3.setScale(0.5).setDepth(9999);
 
-        this.player = this.add.existing(new Player(this, 400, 150));
+        for (var i = 0; i < layer2.layer.data.length; i++) {
+            const d = layer2.layer.data[i];
+            for (var j = 0; j < d.length; j++) {
+                const tile = d[j];
+                if (tile.index === -1) continue;
+                const body = this.physics.add.staticImage(tile.pixelX/2 + tile.width/4, tile.pixelY/2 + tile.height/8,'tileCollider').setScale(0.25, 0.25).refreshBody();
+                this.staticGroup.add(body);
+            }
+        }
+
+        this.player = this.physics.add.existing(new Player(this, 400, 150));
+        this.add.existing(this.player);
         this.player.cursor = this.targetCursor = this.add.existing(new TargetCursor(this, this.player)).setDepth(999999999999);
         this.cameras.main.startFollow(this.player, false, 0.1, 0.1);
-        this.enemy = this.add.existing(new Enemy(this, 400, 150));
+        var enemy = this.physics.add.existing(new Enemy(this, 400, 150));
+        this.add.existing(enemy);
+        this.enemyGroup.add(enemy);
+        this.enemies.push(enemy);
 
-        var obstacle = this.add.existing(new Obstacle(this, 600, 500));
-        obstacle.setObstacleGroup(obstacleGroup);
+        this.bulletGroup = this.physics.add.group();
+        this.physics.add.collider(this.player, this.staticGroup);
+        this.physics.add.overlap(this.player, this.bulletGroup, (player, bullet) => { player.hurt(); bullet.destroy();}, null, this);
+        this.physics.add.overlap(bubbleGroup, this.staticGroup, bubbleHitObstacle, null, this);
+        this.physics.add.overlap(bubbleGroup, this.enemyGroup, bubbleHitEnemy, null, this);
+        this.physics.add.collider(this.enemyGroup, this.staticGroup);
 
         this.scene.run('ui');
 
@@ -96,7 +119,15 @@ class MyGame extends Phaser.Scene
         let dt = (now - (this.lastFrame || 0)) / 1000;
         this.targetCursor.update(dt);
         this.player.update(dt);
-        this.enemy.update(dt);
+        this.enemies.forEach(e => e.update(dt));
+
+        this.enemies = this.enemies.filter(e => {
+            if (e.life <= 0) {
+                e.destroy();
+                return false;
+            }
+            return true;
+        });
 
         this.lastFrame = now;
     }
@@ -108,9 +139,12 @@ class MyGame extends Phaser.Scene
 
 function bubbleHitObstacle(bubble, obstacle) {
     bubble.destroy();
-    obstacle.destroy();
 }
 
+function bubbleHitEnemy(bubble, enemy) {
+    bubble.destroy();
+    enemy.hurt();
+}
 
 const config = {
     type: Phaser.AUTO,
@@ -119,7 +153,7 @@ const config = {
     height: 600,
     physics: {
         default: 'arcade',
-        arcade: {}
+        arcade: {debug: true},
     },
     scene: [MyGame, UIScene]
 };

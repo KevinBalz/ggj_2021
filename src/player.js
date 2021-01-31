@@ -3,7 +3,7 @@ import Bubble from "./bubble";
 
 const moveSpeed = 100;
 
-export default class Player extends Phaser.GameObjects.Image {
+export default class Player extends Phaser.Physics.Arcade.Image {
     constructor(scene, x, y) {
         super(scene, x, y, 'doggo', 0);
         this.life = 5;
@@ -81,21 +81,41 @@ export default class Player extends Phaser.GameObjects.Image {
         }
 
         if (!this.dashing && this.scene.input.mousePointer.leftButtonDown() && this.shootCooldown <= 0) {
-            const speed = 500;
+            const speed = 1000;
             var bubble = this.scene.add.existing(new Bubble(this.scene, this.x, this.y));
             bubble.shootBubble(speed, this, 'bark');
+            const off = new Phaser.Math.Vector2(50, 0 * (this.flipY ? -1 : 1)).rotate(this.rotation);
+            const spawn = new Phaser.Math.Vector2(this.x + off.x, this.y + off.y);
+            const direction = new Phaser.Math.Vector2(this.cursor.x - this.x, this.cursor.y - this.y).normalize();
+            //const bubble = this.scene.physics.add.image(this.x + off.x, this.y + off.y, 'bubble')
+            //    .setScale(0.025, 0.025)
+            //    .setVelocity(speed * direction.x, speed * direction.y)
+            this.shootCooldown = 0.5;
+            this.scene.cameras.main.shake(40, 0.005);
+            //this.scene.cameras.main.flash(1, 100, 100, 255);
+            this.scene.sound.play('bark');
 
-            this.shootCooldown = 0.25;
+            this.scene.tweens.add({
+                targets: bubble,
+                scale: 0.05,
+                duration: 200,
+                repeat: 1337,
+                yoyo: true
+            });
+            //this.scene.physics.add.collider(bubble, this.scene.staticGroup, (bubble) => bubble.destroy(), null, this.scene);
         }
 
-        this.x += moveX * moveSpeed * dt;
-        this.y += moveY * moveSpeed * dt;
+
+        this.body.setVelocity(moveX * moveSpeed, moveY * moveSpeed);
+        //this.x += moveX * moveSpeed * dt;
+        //this.y += moveY * moveSpeed * dt;
         this.dashWasDown = this.scene.input.mousePointer.rightButtonDown();
     }
 
     hurt() {
         this.scene.sound.play('hurt');
         this.scene.cameras.main.flash(5);
+        this.scene.cameras.main.shake(200, 0.05);
         this.life--;
     }
 }

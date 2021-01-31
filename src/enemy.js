@@ -4,7 +4,7 @@ const movementSpeed = 20;
 const targetDistance = 300;
 const normalScale = 0.1;
 
-export default class Enemy extends Phaser.GameObjects.Image {
+export default class Enemy extends Phaser.Physics.Arcade.Image {
     constructor(scene, x, y) {
         super(scene, x, y, 'pufferfish', 0);
         this.life = 3;
@@ -76,16 +76,19 @@ const bulletSpeed = 100;
 function onCompleteBlowUp(tween, targets, enemy)
 {
     if (enemy === undefined) return;
+    if (enemy.scene === undefined) return;
     delete enemy.blowUp;
     for (let i = 0; i < 8; i++) {
         let rad = i * Math.PI / 4;
         let spawn = new Phaser.Math.Vector2(enemy.x + bulletOff * Math.cos(rad), enemy.y + bulletOff * Math.sin(rad));
         let direction = spawn.clone().subtract(new Phaser.Math.Vector2(enemy.x, enemy.y)).normalize();
-        enemy.scene.physics.add.image(spawn.x, spawn.y, 'pufferfishSpike')
+        let bullet = enemy.scene.physics.add.image(spawn.x, spawn.y, 'pufferfishSpike')
         .setVelocity(direction.x * bulletSpeed, direction.y * bulletSpeed)
         .setScale(0.1)
         .setRotation(Math.atan2(direction.y, direction.x))
         .setFlipX(true);
+        enemy.scene.bulletGroup.add(bullet);
+        bullet.body.setVelocity(direction.x * bulletSpeed, direction.y * bulletSpeed);
     }
 
     enemy.scene.sound.play('puff');
