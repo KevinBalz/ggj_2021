@@ -34,6 +34,20 @@ import tiles3Png from './assets/map/Tilemap3.png';
 import atlantisPng from './assets/map/Atlantis.png';
 import tilemapTiledJSON from './assets/map/Testmap3.json';
 
+import explosion00 from './assets/explosion/explosion00.png';
+import explosion01 from './assets/explosion/explosion01.png';
+import explosion02 from './assets/explosion/explosion02.png';
+import explosion03 from './assets/explosion/explosion03.png';
+import explosion04 from './assets/explosion/explosion04.png';
+import explosion05 from './assets/explosion/explosion05.png';
+import explosion06 from './assets/explosion/explosion06.png';
+import explosion07 from './assets/explosion/explosion07.png';
+import explosion08 from './assets/explosion/explosion08.png';
+import explosion09 from './assets/explosion/explosion09.png';
+import explosion10 from './assets/explosion/explosion10.png';
+import explosion11 from './assets/explosion/explosion11.png';
+import explosion12 from './assets/explosion/explosion12.png';
+
 class MyGame extends Phaser.Scene
 {
     constructor ()
@@ -70,6 +84,20 @@ class MyGame extends Phaser.Scene
         this.load.image('tiles3', tiles3Png);
         this.load.image('atlantis', atlantisPng);
         this.load.tilemapTiledJSON('map', tilemapTiledJSON);
+
+        this.load.image('explosion00', explosion00);
+        this.load.image('explosion01', explosion01);
+        this.load.image('explosion02', explosion02);
+        this.load.image('explosion03', explosion03);
+        this.load.image('explosion04', explosion04);
+        this.load.image('explosion05', explosion05);
+        this.load.image('explosion06', explosion06);
+        this.load.image('explosion07', explosion07);
+        this.load.image('explosion08', explosion08);
+        this.load.image('explosion09', explosion09);
+        this.load.image('explosion10', explosion10);
+        this.load.image('explosion11', explosion11);
+        this.load.image('explosion12', explosion12);
     }
       
     create ()
@@ -154,6 +182,27 @@ class MyGame extends Phaser.Scene
         this.physics.add.overlap(bubbleGroup, this.enemyGroup, bubbleHitEnemy, null, this);
         this.physics.add.collider(this.enemyGroup, this.staticGroup);
 
+        this.anims.create({
+            key: 'explode',
+            frames: [
+                { key: 'explosion00' },
+                { key: 'explosion01' },
+                { key: 'explosion02' },
+                { key: 'explosion03' },
+                { key: 'explosion04' },
+                { key: 'explosion05' },
+                { key: 'explosion06' },
+                { key: 'explosion07' },
+                { key: 'explosion08' },
+                { key: 'explosion09' },
+                { key: 'explosion10' },
+                { key: 'explosion11' },
+                { key: 'explosion12', duration: 50 }
+            ],
+            frameRate: 8//,
+            //repeat: 0
+        });
+
         this.scene.run('ui');
 
         var music = this.sound.add('theme');
@@ -171,6 +220,8 @@ class MyGame extends Phaser.Scene
         this.enemies = this.enemies.filter(e => {
             if (e.life <= 0) {
                 e.destroy();
+                var expl = this.add.sprite(e.x, e.y, 'explosion00')
+                    .play('explode', 8, false, true);
                 return false;
             }
             return true;
