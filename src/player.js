@@ -104,9 +104,21 @@ export default class Player extends Phaser.Physics.Arcade.Image {
     }
 
     hurt() {
-        this.scene.sound.play('hurt');
-        this.scene.cameras.main.flash(5);
-        this.scene.cameras.main.shake(200, 0.05);
         this.life--;
+
+        if (this.life <= 0) {
+            delete this.scene.player;
+            this.scene.cameras.main.flash(500);
+            this.scene.cameras.main.shake(300, 0.5);
+            this.scene.sound.play('ded');
+            this.scene.sound.play('ded');
+            this.scene.sound.play('ded');
+            this.destroy();
+        }
+        else {
+            this.scene.cameras.main.flash(5);
+            this.scene.cameras.main.shake(200, 0.05);
+            this.scene.sound.play('hurt');
+        }
     }
 }

@@ -22,6 +22,7 @@ import dashClip from './assets/dash.wav';
 import hitClip from './assets/hit.wav';
 import hurtClip from './assets/hurt.wav';
 import popClip from './assets/pop.wav';
+import dedClip from './assets/ded.wav';
 import mainTheme from './assets/sea_doggo_theme-mastered.mp3';
 
 import tilesPng from './assets/map/Tilemap.png';
@@ -55,6 +56,7 @@ class MyGame extends Phaser.Scene
         this.load.audio('hit', hitClip);
         this.load.audio('hurt', hurtClip);
         this.load.audio('pop', popClip);
+        this.load.audio('ded', dedClip);
         this.load.audio('theme', mainTheme);
 
         this.load.image('tiles', tilesPng);
@@ -123,7 +125,7 @@ class MyGame extends Phaser.Scene
         let now = Date.now();
         let dt = (now - (this.lastFrame || 0)) / 1000;
         this.targetCursor.update(dt);
-        this.player.update(dt);
+        this.player && this.player.update(dt);
         this.enemies.forEach(e => e.update(dt));
 
         this.enemies = this.enemies.filter(e => {
